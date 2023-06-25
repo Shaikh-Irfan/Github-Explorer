@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', monospace;
+    }
+
+body{
+    background: rgb(0, 0, 0);
+}
+
+#profileContainer {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .profilemain {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgb(102, 101, 101);
+  }
+
+  #profilePicture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 20px 20px;
+  }
+
+  .maindetail {
+    color: aliceblue;
+  }
+
+  .profile-link-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background: transparent;
+    color: #817f7f;
+    text-decoration: none;
+    box-shadow: 0 0 4px rgb(102, 101, 101);
+    border-radius: 10px;
+    transition: .5s;
+  }
+  
+  .profile-link-button:hover {
+    color: black;
+    background-color: aliceblue;
+  }
+  
+
+  #profileFollowing,
+  #profileFollowers {
+    font-size: 15px;
+  }
+
+  #profileName {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 24px;
+  }
+
+  #profileStats {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  #profileStats span {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+
+  .bio {
+    color: aliceblue;
+    width: auto;
+    height: auto;
+    box-shadow: 0 0 4px rgb(102, 101, 101);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+  }
+  
+  .readme-container {
+    color: aliceblue;
+    padding: 20px;
+    list-style: none;
+  }
+
+  .readme-container h3 {
+    color: rgb(0, 110, 255);
+    font-size: 15px;
+  }
+
+  .repositorycount {
+    color: aliceblue;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: 40px 20px 20px 20px;
+  }
+
+  #repositoryList {
+    padding-left: 0;
+    list-style: none;
+  }
+
+  #repositoryList li {
+    color: aliceblue;
+    box-shadow: 0 0 4px rgb(102, 101, 101);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .repository-name {
+    font-weight: bold;
+  }
+
+  .repository-description {
+    margin-top: 5px;
+    font-style: italic;
+  }
+
+  .repository-status {
+    font-size: 12px;
+    color: rgb(125, 125, 126);
+    box-shadow: 0 0 4px rgb(102, 101, 101);
+    border-radius: 10px;
+    margin: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .repository-link-button {
+    display: inline-block;
+    margin-top: 10px;
+    margin-left: 10px;
+    padding: 5px 10px;
+    background: transparent;
+    color: #817f7f;
+    text-decoration: none;
+    box-shadow: 0 0 4px rgb(102, 101, 101);
+    border-radius: 10px;
+    transition: .5s;
+  }
+
+  .repository-link-button:hover {
+    color: black;
+    background-color: aliceblue;
+  }
+
+  

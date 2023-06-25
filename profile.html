@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile</title>
+  <link rel="stylesheet" href="./profile.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+</head>
+<body>
+  <div id="profileContainer">
+    <div class="profilemain">
+        <img id="profilePicture" src="" alt="Profile Picture"> 
+        <div class="maindetail">       
+            <h1 id="profileName"></h1>
+            <p id="profileFollowers"></p>
+            <p id="profileFollowing"></p>
+            <a id="profileLinkButton" class="profile-link-button" href="" target="_blank">View Profile</a>
+        </div>
+    </div>
+    <div class="bio">
+        <p id="profileBio"></p>
+    </div>
+    <div id="readme"></div>
+    <div class="repositorycount">
+        <h4>Repositories </h4>
+        <p id="repositoryCount"></p>
+    </div>
+    <ul id="repositoryList"></ul>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    var converter = new showdown.Converter();
+    
+    $(document).ready(function() {
+      var username = getParameterByName('username');
+      fetchProfile(username);
+    });
+
+    function getParameterByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    function fetchProfile(username) {
+      var apiUrl = 'https://api.github.com/users/' + username;
+      $.getJSON(apiUrl)
+        .done(function(data) {
+          var profileName = data.name || data.login;
+          var profilePicture = data.avatar_url;
+          var profileFollowers = data.followers;
+          var profileFollowing = data.following;
+          var profileLink = data.html_url;
+          var profileBio = data.bio;
+          var repositoryCount = data.public_repos;
+
+          $('#profileName').text(profileName);
+          $('#profilePicture').attr('src', profilePicture);
+          $('#profileFollowers').text(profileFollowers + ' : followers');
+          $('#profileFollowing').text(profileFollowing + ' : following');
+          $('#profileLinkButton').attr('href', profileLink);
+          $('#profileBio').text(profileBio);
+          $('#repositoryCount').text(' : ' + repositoryCount);
+
+          fetchRepositories(username);
+        })
+        .fail(function() {
+          console.log('Failed to fetch profile for ' + username);
+        });
+    }
+
+    function fetchRepositories(username) {
+    var apiUrl = 'https://api.github.com/users/' + username + '/repos';
+    $.getJSON(apiUrl)
+        .done(function(data) {
+        // Clear previous repository list
+        $('#repositoryList').empty();
+
+        // Display repository names, public status, and READMEs/descriptions
+        if (data.length > 0) {
+            for (var i = 0; i < data.length; i++) {
+            var repository = data[i];
+            var repositoryName = repository.name;
+            var repositoryDescription = repository.description;
+            var repositoryLink = repository.html_url;
+            var isPublic = repository.private ? 'Private' : 'Public';
+
+            if (repositoryName === username) {
+                // Fetch and display the README for the ZEN repository
+                fetchReadme(username, repositoryName);
+            } else {
+                // Display the description, public status, and link for other repositories
+                var listItem = $('<li>');
+                var repositoryNameElement = $('<span>').addClass('repository-name').text(repositoryName);
+                var repositoryDescriptionElement = $('<span>').addClass('repository-description').text(repositoryDescription);
+                var isPublicElement = $('<span>').addClass('repository-status').text(isPublic);
+                var repositoryLinkButton = $('<a>').addClass('repository-link-button').text('View Repository').attr('href', repositoryLink);
+                listItem.append(repositoryNameElement, ': ', repositoryDescriptionElement, ' ', isPublicElement, ' ', repositoryLinkButton);
+                $('#repositoryList').append(listItem);
+            }
+            }
+        } else {
+            $('#repositoryList').append($('<li>').text('No repositories found.'));
+        }
+        })
+        .fail(function() {
+        // Handle error if unable to fetch repositories
+        console.log('Failed to fetch repositories for ' + username);
+        });
+    }
+
+
+    function fetchReadme(username, repositoryName) {
+      var apiUrl = 'https://api.github.com/repos/' + username + '/' + repositoryName + '/readme';
+      $.getJSON(apiUrl)
+        .done(function(data) {
+          // Decode and convert the readme content to HTML
+          var readmeContent = atob(data.content);
+          var readmeHtml = converter.makeHtml(readmeContent);
+
+          // Create readme container element
+          var readmeContainer = $('<div>').addClass('readme-container');
+          var readmeHeader = $('<h3>').text(repositoryName + ' README.md');
+          var readmeContentElement = $('<div>').html(readmeHtml);
+          readmeContainer.append(readmeHeader, readmeContentElement);
+          $('#readme').append(readmeContainer);
+        })
+        .fail(function() {
+          console.log('Failed to fetch readme for ' + repositoryName);
+        });
+    }
+  </script>
+</body>
+</html>
